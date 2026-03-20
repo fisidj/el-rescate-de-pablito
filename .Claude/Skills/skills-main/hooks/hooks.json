@@ -1,0 +1,56 @@
+{
+	"hooks": {
+		"PreToolUse": [
+			{
+				"matcher": "Edit|Write",
+				"hooks": [
+					{
+						"type": "command",
+						"command": "node ${CLAUDE_PLUGIN_ROOT}/wrapper.ts lint-guard"
+					}
+				]
+			}
+		],
+		"PostToolUse": [
+			{
+				"matcher": "Edit|Write",
+				"hooks": [
+					{
+						"type": "command",
+						"command": "node ${CLAUDE_PLUGIN_ROOT}/wrapper.ts lint"
+					},
+					{
+						"type": "command",
+						"command": "node ${CLAUDE_PLUGIN_ROOT}/wrapper.ts type-check"
+					}
+				]
+			}
+		],
+		"Stop": [
+			{
+				"matcher": "",
+				"hooks": [
+					{
+						"type": "command",
+						"command": "node ${CLAUDE_PLUGIN_ROOT}/wrapper.ts lint-stop"
+					},
+					{
+						"type": "command",
+						"command": "node ${CLAUDE_PLUGIN_ROOT}/wrapper.ts type-check-stop"
+					}
+				]
+			}
+		],
+		"SessionStart": [
+			{
+				"matcher": "startup|resume|clear|compact",
+				"hooks": [
+					{
+						"type": "command",
+						"command": "node ${CLAUDE_PLUGIN_ROOT}/wrapper.ts clear-lint-state"
+					}
+				]
+			}
+		]
+	}
+}

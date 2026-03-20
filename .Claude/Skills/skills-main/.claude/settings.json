@@ -1,0 +1,83 @@
+{
+	"includeCoAuthoredBy": true,
+	"permissions": {
+		"allow": [
+			"Bash(gh:*)",
+			"Bash(gh pr:*)",
+			"Bash(gh pr create:*)",
+			"Bash(gh pr view:*)",
+			"Bash(gh run list:*)",
+			"Bash(gh run view:*)",
+			"Glob",
+			"Grep",
+			"LS",
+			"Read",
+			"Read(*)",
+			"TodoWrite",
+			"WebFetch",
+			"WebSearch"
+		],
+		"deny": [],
+		"ask": [],
+		"defaultMode": "plan",
+		"additionalDirectories": []
+	},
+	"hooks": {
+		"PreToolUse": [
+			{
+				"matcher": "Edit|Write",
+				"hooks": [
+					{
+						"type": "command",
+						"command": "node hooks/lint-guard.ts"
+					}
+				]
+			}
+		],
+		"PostToolUse": [
+			{
+				"matcher": "Edit|Write",
+				"hooks": [
+					{
+						"type": "command",
+						"command": "node hooks/lint.ts"
+					},
+					{
+						"type": "command",
+						"command": "node hooks/type-check.ts"
+					}
+				]
+			}
+		],
+		"Stop": [
+			{
+				"matcher": "",
+				"hooks": [
+					{
+						"type": "command",
+						"command": "node hooks/lint-stop.ts"
+					},
+					{
+						"type": "command",
+						"command": "node hooks/type-check-stop.ts"
+					}
+				]
+			}
+		],
+		"SessionStart": [
+			{
+				"matcher": "startup|resume|clear|compact",
+				"hooks": [
+					{
+						"type": "command",
+						"command": "node hooks/clear-lint-state.ts"
+					}
+				]
+			}
+		]
+	},
+	"outputStyle": "XP Programmer",
+	"enabledPlugins": {
+		"plugin-dev@claude-code-plugins": true
+	}
+}
